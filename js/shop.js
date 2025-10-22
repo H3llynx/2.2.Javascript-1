@@ -72,8 +72,7 @@ const products = [
 // Improved version of cartList. Cart is an array of products (objects), but each one has a quantity field to define its quantity, so these products are not repeated.
 const cart = [];
 
-let total = 0;
-//const total = 0;
+const total = 0;
 
 // Exercise 1
 const buy = (id) => {
@@ -106,8 +105,13 @@ addToCartBtn.forEach(btn => {
 
 // Exercise 2
 const cleanCart = () => {
-
+    cart.length = 0;
+    return cart;
 }
+
+const cleanCartBtn = document.getElementById("clean-cart");
+cleanCartBtn.addEventListener("click", cleanCart);
+
 
 // Exercise 3
 const calculateTotal = () => {
