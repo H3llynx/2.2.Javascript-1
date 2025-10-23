@@ -72,7 +72,7 @@ const products = [
 // Improved version of cartList. Cart is an array of products (objects), but each one has a quantity field to define its quantity, so these products are not repeated.
 const cart = [];
 
-const total = 0;
+let total = 0;
 
 // Exercise 1
 const buy = (id) => {
@@ -99,13 +99,16 @@ addToCartBtn.forEach(btn => {
     btn.addEventListener("click", () => {
         const id = Number(btn.dataset.productId);
         buy(id)
-        console.log(cart)
+        calculateTotal();
+        applyPromotionsCart();
     })
 });
 
 // Exercise 2
 const cleanCart = () => {
     cart.length = 0;
+    total = 0;
+    document.getElementById("total_price").innerText = total;
     return cart;
 }
 
@@ -116,11 +119,34 @@ cleanCartBtn.addEventListener("click", cleanCart);
 // Exercise 3
 const calculateTotal = () => {
     // Calculate total price of the cart using the "cartList" array
+    total = 0;
+    for (let item of cart) {
+        total += item.price * item.quantity;
+    }
+    return total;
 }
 
 // Exercise 4
 const applyPromotionsCart = () => {
     // Apply promotions to each item in the array "cart"
+    let discountedItemsTotal = 0;
+    let subtotalWithDiscount = total;
+    cart.forEach(item => {
+        if (!item.offer) {
+            return;
+        } else {
+            if (item.quantity >= item.offer.number) {
+                discountedItemsTotal = parseFloat(((item.price * item.quantity) * (1 - item.offer.percent / 100)).toFixed(2));
+                subtotalWithDiscount -= item.price * item.quantity;
+                subtotalWithDiscount += discountedItemsTotal;
+                cart.forEach(item => console.log(`product: ${item.name} - quantity: ${item.quantity} - price: ${item.price}$/unit`))
+                console.log(`Discount applied on ${item.name} - new total: ${discountedItemsTotal}`);
+                console.log(`Total cart price included the discount: ${subtotalWithDiscount} (instead of ${total})`)
+                return subtotalWithDiscount;
+            } else return;
+        }
+    })
+
 }
 
 // Exercise 5
