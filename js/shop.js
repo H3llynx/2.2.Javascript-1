@@ -91,6 +91,11 @@ const buy = (id) => {
         selectedProduct.quantity = 1;
         cart.push(selectedProduct);
     }
+    let itemCount = 0;
+    cart.forEach(item => {
+        itemCount += item.quantity;
+    });
+    document.getElementById("count_product").innerText = itemCount;
     return cart;
 }
 
@@ -99,8 +104,8 @@ addToCartBtn.forEach(btn => {
     btn.addEventListener("click", () => {
         const id = Number(btn.dataset.productId);
         buy(id)
-        calculateTotal();
         applyPromotionsCart();
+        calculateTotal();
     })
 });
 
@@ -108,8 +113,8 @@ addToCartBtn.forEach(btn => {
 const cleanCart = () => {
     cart.length = 0;
     total = 0;
-    document.getElementById("total_price").innerText = total;
-    return cart;
+    document.getElementById("count_product").innerText = 0;
+    printCart();
 }
 
 const cleanCartBtn = document.getElementById("clean-cart");
@@ -121,7 +126,7 @@ const calculateTotal = () => {
     // Calculate total price of the cart using the "cartList" array
     total = 0;
     for (let item of cart) {
-        total += item.price * item.quantity;
+        total += item.subtotalWithDiscount;
     }
     return total;
 }
@@ -129,32 +134,32 @@ const calculateTotal = () => {
 // Exercise 4
 const applyPromotionsCart = () => {
     // Apply promotions to each item in the array "cart"
-    let discountedItemsTotal = 0;
-    let subtotalWithDiscount = total;
     cart.forEach(item => {
-        if (!item.offer) {
-            return;
-        } else {
-            if (item.quantity >= item.offer.number) {
-                discountedItemsTotal = parseFloat(((item.price * item.quantity) * (1 - item.offer.percent / 100)).toFixed(2));
-                subtotalWithDiscount -= item.price * item.quantity;
-                subtotalWithDiscount += discountedItemsTotal;
-                cart.forEach(item => console.log(`product: ${item.name} - quantity: ${item.quantity} - price: ${item.price}$/unit`))
-                console.log(`Discount applied on ${item.name} - new total: ${discountedItemsTotal}`);
-                console.log(`Total cart price included the discount: ${subtotalWithDiscount} (instead of ${total})`)
-                return subtotalWithDiscount;
-            } else return;
-        }
-    })
-
-}
+        let subtotal = item.price * item.quantity;
+        if (item.offer && item.quantity >= item.offer.number) {
+            item.subtotalWithDiscount = parseFloat((subtotal * (1 - item.offer.percent / 100)).toFixed(2));
+        } else item.subtotalWithDiscount = parseFloat(subtotal.toFixed(2));
+    }
+    )
+};
 
 // Exercise 5
 const printCart = () => {
     // Fill the shopping cart modal manipulating the shopping cart dom
+    const cartList = document.getElementById("cart_list");
+    cartList.innerHTML = "";
+    cart.forEach(item => {
+        cartList.innerHTML += `
+        <th scope="row">${item.name}</th>
+        <td>$${item.price}</td>
+        <td>${item.quantity}</td>
+        <td>$${item.subtotalWithDiscount}</td>
+        `;
+    });
+    document.getElementById("total_price").innerText = total;
 }
 
-
+document.querySelector(".cart-button").addEventListener("click", printCart);
 // ** Nivell II **
 
 // Exercise 7
