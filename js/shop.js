@@ -70,9 +70,21 @@ const products = [
 // ** Don't hesitate to seek help from your peers or your mentor if you still struggle with debugging.
 
 // Improved version of cartList. Cart is an array of products (objects), but each one has a quantity field to define its quantity, so these products are not repeated.
-const cart = [];
-
 let total = 0;
+
+const savedCart = localStorage.getItem("shopping_cart");
+
+let cart = savedCart ? JSON.parse(savedCart) : [];
+
+const updateCartButton = () => {
+    let itemCount = 0;
+    cart.forEach(item => {
+        itemCount += item.quantity;
+    });
+    document.getElementById("count_product").innerText = itemCount;
+}
+
+updateCartButton();
 
 // Exercise 1
 const buy = (id) => {
@@ -91,11 +103,6 @@ const buy = (id) => {
         selectedProduct.quantity = 1;
         cart.push(selectedProduct);
     }
-    let itemCount = 0;
-    cart.forEach(item => {
-        itemCount += item.quantity;
-    });
-    document.getElementById("count_product").innerText = itemCount;
     return cart;
 }
 
@@ -104,8 +111,10 @@ addToCartBtn.forEach(btn => {
     btn.addEventListener("click", () => {
         const id = Number(btn.dataset.productId);
         buy(id)
+        updateCartButton();
         applyPromotionsCart();
         calculateTotal();
+        localStorage.setItem("shopping_cart", JSON.stringify(cart));
     })
 });
 
@@ -113,13 +122,15 @@ addToCartBtn.forEach(btn => {
 const cleanCart = () => {
     cart.length = 0;
     total = 0;
-    document.getElementById("count_product").innerText = 0;
+    localStorage.removeItem("shopping_cart");
+    updateCartButton();
     printCart();
 }
 
 const cleanCartBtn = document.getElementById("clean-cart");
-cleanCartBtn.addEventListener("click", cleanCart);
-
+if (cleanCartBtn) {
+    cleanCartBtn.addEventListener("click", cleanCart);
+}
 
 // Exercise 3
 const calculateTotal = () => {
@@ -150,16 +161,24 @@ const printCart = () => {
     cartList.innerHTML = "";
     cart.forEach(item => {
         cartList.innerHTML += `
+        <tr>
         <th scope="row">${item.name}</th>
         <td>$${item.price}</td>
         <td>${item.quantity}</td>
         <td>$${item.subtotalWithDiscount}</td>
+        </tr>
         `;
     });
-    document.getElementById("total_price").innerText = total;
+    document.getElementById("total_price").innerText = calculateTotal();
+    document.getElementById("checkout").classList.toggle("disabled", cart.length === 0);
+    document.getElementById("clean-cart").classList.toggle("disabled", cart.length === 0);
 }
 
-document.querySelector(".cart-button").addEventListener("click", printCart);
+const cartBtn = document.querySelector(".cart-button");
+if (cartBtn) {
+    cartBtn.addEventListener("click", printCart);
+}
+
 // ** Nivell II **
 
 // Exercise 7
