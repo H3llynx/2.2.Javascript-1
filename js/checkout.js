@@ -1,8 +1,11 @@
-let isNameValid = false;
-let isEmailValid = false;
-let isAddressValid = false;
-let isPasswordValid = false;
-let isPhoneValid = false;
+const validationStatus = {
+	name: false,
+	lastName: false,
+	email: false,
+	address: false,
+	password: false,
+	phone: false
+};
 
 const fName = document.getElementById("fName");
 const fEmail = document.getElementById("fEmail");
@@ -10,41 +13,50 @@ const fAddress = document.getElementById("fAddress");
 const fLastN = document.getElementById("fLastN");
 const fPassword = document.getElementById("fPassword");
 const fPhone = document.getElementById("fPhone");
+const form = document.querySelector("form");
 
 // Exercise 6
 const validate = () => {
-	if (!isNameValid || !isEmailValid || !isAddressValid || !isPasswordValid || !isPhoneValid) {
+	const isFormValid = Object.values(validationStatus).every(value => value === true);
+	if (!isFormValid) {
 		alert("Please fill in all required fields correctly.");
+		form.querySelectorAll("input").forEach(input => {
+			input.classList.toggle("is-invalid", input.value === "");
+		});
 		return
 	} else {
 		alert("Form submitted successfully");
 	}
-}
+};
 
-const validateName = () => {
-	isNameValid = false;
-	const errorName = document.getElementById("errorName");
+const validateName = (input, errorBox, key) => {
+	validationStatus[key] = false;
+	const errorName = document.getElementById(errorBox);
 	errorName.textContent = "";
-	if (fName.value.length < 3) {
+	if (input.value.length < 3) {
 		errorName.style.display = "block";
-		errorName.textContent = "This field is required and must have, at least, 3 characters";
+		errorName.textContent = "This field is required and must have at least 3 characters";
 	}
-	else if ((!(/^[\p{L}\s'-]+$/ui).test(fName.value))) { // I'm allowing ', - and spaces as those are communs characters in French composed names
+	else if ((!(/^[\p{L}\s'-]+$/ui).test(input.value))) { // I'm allowing ', - and spaces as those are communs characters in French composed names
 		errorName.style.display = "block";
 		errorName.textContent = "This field can only include valid name characters";
 	}
 	else {
 		errorName.style.display = "none";
-		isNameValid = true;
+		validationStatus[key] = true;
 	}
-}
+};
 
 const validateEmail = () => {
-	isEmailValid = false;
+	validationStatus.email = false;
 	const errorEmail = document.getElementById("errorEmail");
 	const emailPattern = /^[a-z0-9._%+-]+@[a-z0-9.-]+\.[a-z]{2,}$/i;
 	const includesEmoji = /\p{Extended_Pictographic}/gu;
-	if (includesEmoji.test(fEmail.value)) {
+	if (fEmail.value.trim() === "") {
+		errorEmail.style.display = "block";
+		errorEmail.textContent = "This field is required";
+	}
+	else if (includesEmoji.test(fEmail.value)) {
 		errorEmail.style.display = "block";
 		errorEmail.textContent = "Oops! Emojis are not allowed.";
 	} else if (!emailPattern.test(fEmail.value)) {
@@ -52,47 +64,29 @@ const validateEmail = () => {
 		errorEmail.textContent = "Please try something like name@domain.com";
 	} else {
 		errorEmail.style.display = "none";
-		isEmailValid = true;
+		validationStatus.email = true;
 	}
-}
-
-const validateLastName = () => {
-	isNameValid = false;
-	const errorName = document.getElementById("errorLastN");
-	errorName.textContent = "";
-	if (fLastN.value.length < 3) {
-		errorName.style.display = "block";
-		errorName.textContent = "This field is required and must have, at least, 3 characters";
-	}
-	else if ((!(/^[\p{L}\s'-]+$/ui).test(fLastN.value))) { // I'm allowing ', - and spaces as those are communs characters in French composed names
-		errorName.style.display = "block";
-		errorName.textContent = "This field can only include valid name characters";
-	}
-	else {
-		errorName.style.display = "none";
-		isNameValid = true;
-	}
-}
+};
 
 const validatePassword = () => {
-	isPasswordValid = false;
+	validationStatus.password = false;
 	const errorPassword = document.getElementById("errorPassword");
 	errorPassword.textContent = "";
-	if (fPassword.value.length < 3) {
+	if (fPassword.value.length < 4) {
 		errorPassword.style.display = "block";
-		errorPassword.textContent = "The password must include, at least, 3 characters";
+		errorPassword.textContent = "The password must include at least 4 characters";
 	}
 	else if ((!(/\d/).test(fPassword.value))) {
 		errorPassword.style.display = "block";
 		errorPassword.textContent = "The password must include, at least, 1 digit";
 	} else {
 		errorPassword.style.display = "none";
-		isPasswordValid = true;
+		validationStatus.password = true;
 	}
-}
+};
 
 const validatePhone = () => {
-	isPhoneValid = false;
+	validationStatus.phone = false;
 	const errorPhone = document.getElementById("errorPhone");
 	errorPhone.textContent = "";
 	if (!(/^\d+$/).test(fPhone.value)) {
@@ -105,12 +99,12 @@ const validatePhone = () => {
 	}
 	else {
 		errorPhone.style.display = "none";
-		isPhoneValid = true;
+		validationStatus.phone = true;
 	}
-}
+};
 
 const validateAddress = () => {
-	isAddressValid = false;
+	validationStatus.address = false;
 	const errorAddress = document.getElementById("errorAddress");
 	errorAddress.textContent = "";
 	if (fAddress.value.length < 3) {
@@ -119,25 +113,31 @@ const validateAddress = () => {
 	}
 	else {
 		errorAddress.style.display = "none";
-		isAddressValid = true;
+		validationStatus.address = true;
 	}
-}
+};
 
 if (fName) {
-	fName.addEventListener("change", validateName);
-}
-if (fEmail) {
-	fEmail.addEventListener("change", validateEmail);
-}
+	fName.addEventListener("blur", () => { validateName(fName, "errorName", "name") });
+};
 if (fLastN) {
-	fLastN.addEventListener("change", validateLastName);
-}
+	fLastN.addEventListener("blur", () => { validateName(fLastN, "errorLastN", "lastName") });
+};
+if (fEmail) {
+	fEmail.addEventListener("blur", validateEmail);
+};
 if (fPassword) {
 	fPassword.addEventListener("input", validatePassword);
-}
+};
 if (fPhone) {
-	fPhone.addEventListener("input", validatePhone);
-}
+	fPhone.addEventListener("blur", validatePhone);
+};
 if (fAddress) {
-	fAddress.addEventListener("change", validateAddress);
-}
+	fAddress.addEventListener("blur", validateAddress);
+};
+if (form) {
+	form.addEventListener("submit", (e) => {
+		e.preventDefault();
+		validate();
+	})
+};
