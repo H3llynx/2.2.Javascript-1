@@ -24,6 +24,7 @@ const validate = () => {
 		return
 	} else {
 		alert("Form submitted successfully");
+		window.location.href = "index.html";
 	}
 };
 

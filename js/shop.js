@@ -172,7 +172,7 @@ const printCart = () => {
     document.getElementById("total_price").innerText = calculateTotal();
     document.getElementById("checkout").classList.toggle("disabled", cart.length === 0);
     document.getElementById("clean-cart").classList.toggle("disabled", cart.length === 0);
-}
+};
 
 const cartBtn = document.querySelector(".cart-button");
 if (cartBtn) {
