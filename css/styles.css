@@ -71,9 +71,16 @@
   box-sizing: border-box;
 }
 
-.disabled {
-  pointer-events: none;
-  filter: opacity(0.3);
+.quantity {
+  display: flex;
+  gap: 0.4rem;
+  align-items: center;
+
+  & button {
+    width: 15px;
+    height: 15px;
+    padding: 0.6rem;
+  }
 }
 
 @media (prefers-reduced-motion: no-preference) {

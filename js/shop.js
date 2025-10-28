@@ -76,16 +76,6 @@ const savedCart = localStorage.getItem("shopping_cart");
 
 let cart = savedCart ? JSON.parse(savedCart) : [];
 
-const updateCartButton = () => {
-    let itemCount = 0;
-    cart.forEach(item => {
-        itemCount += item.quantity;
-    });
-    document.getElementById("count_product").innerText = itemCount;
-}
-
-updateCartButton();
-
 // Exercise 1
 const buy = (id) => {
     // 1. Loop for to the array products to get the item to add to cart
@@ -106,18 +96,6 @@ const buy = (id) => {
     return cart;
 }
 
-const addToCartBtn = document.querySelectorAll(".add-to-cart");
-addToCartBtn.forEach(btn => {
-    btn.addEventListener("click", () => {
-        const id = Number(btn.dataset.productId);
-        buy(id)
-        updateCartButton();
-        applyPromotionsCart();
-        calculateTotal();
-        localStorage.setItem("shopping_cart", JSON.stringify(cart));
-    })
-});
-
 // Exercise 2
 const cleanCart = () => {
     cart.length = 0;
@@ -125,11 +103,6 @@ const cleanCart = () => {
     localStorage.removeItem("shopping_cart");
     updateCartButton();
     printCart();
-}
-
-const cleanCartBtn = document.getElementById("clean-cart");
-if (cleanCartBtn) {
-    cleanCartBtn.addEventListener("click", cleanCart);
 }
 
 // Exercise 3
@@ -164,28 +137,103 @@ const printCart = () => {
         <tr>
         <th scope="row">${item.name}</th>
         <td>$${item.price}</td>
-        <td>${item.quantity}</td>
+        <td><div class="quantity">
+        <button class="remove btn btn-secondary btn-sm d-flex justify-content-center align-items-center" data-id="${item.id}">-</button>
+        ${item.quantity}
+        <button class="add btn btn-secondary btn-sm d-flex justify-content-center align-items-center" data-id="${item.id}">+</button>
+        </div>
+        </td>
         <td>$${item.subtotalWithDiscount}</td>
         </tr>
         `;
     });
+
     document.getElementById("total_price").innerText = calculateTotal();
     document.getElementById("checkout").classList.toggle("disabled", cart.length === 0);
     document.getElementById("clean-cart").classList.toggle("disabled", cart.length === 0);
-};
 
-const cartBtn = document.querySelector(".cart-button");
-if (cartBtn) {
-    cartBtn.addEventListener("click", printCart);
-}
+    const removeBtn = document.querySelectorAll(".remove");
+    removeBtn.forEach(btn => {
+        btn.addEventListener("click", () => {
+            const id = Number(btn.dataset.id);
+            removeFromCart(id);
+            applyPromotionsCart();
+            calculateTotal();
+            updateCartButton();
+            printCart();
+            localStorage.setItem("shopping_cart", JSON.stringify(cart));
+        });
+    });
+
+    const addBtn = document.querySelectorAll(".add");
+    addBtn.forEach(btn => {
+        btn.addEventListener("click", () => {
+            const id = Number(btn.dataset.id);
+            buy(id);
+            applyPromotionsCart();
+            calculateTotal();
+            updateCartButton();
+            printCart();
+            localStorage.setItem("shopping_cart", JSON.stringify(cart));
+        });
+    });
+};
 
 // ** Nivell II **
 
 // Exercise 7
 const removeFromCart = (id) => {
-
+    for (let item of cart) {
+        if (item.id === id) {
+            if (item.quantity > 1) {
+                item.quantity -= 1;
+            } else {
+                const itemIndex = cart.indexOf(item.id);
+                cart.splice(itemIndex, 1);
+            }
+        }
+    }
+    return cart;
 }
+
 
 const open_modal = () => {
     printCart();
+}
+
+// ** ADDITIONAL FUNCTIONS **
+
+const updateCartButton = () => {
+    let itemCount = 0;
+    cart.forEach(item => {
+        itemCount += item.quantity;
+    });
+    const itemCounter = document.getElementById("count_product");
+    if (itemCounter) itemCounter.innerText = itemCount;
+}
+
+updateCartButton();
+
+// ** EVENT LISTENERS **
+
+const addToCartBtn = document.querySelectorAll(".add-to-cart");
+addToCartBtn.forEach(btn => {
+    btn.addEventListener("click", () => {
+        const id = Number(btn.dataset.productId);
+        buy(id)
+        updateCartButton();
+        applyPromotionsCart();
+        calculateTotal();
+        localStorage.setItem("shopping_cart", JSON.stringify(cart));
+    })
+});
+
+const cleanCartBtn = document.getElementById("clean-cart");
+if (cleanCartBtn) {
+    cleanCartBtn.addEventListener("click", cleanCart);
+}
+
+const cartBtn = document.querySelector(".cart-button");
+if (cartBtn) {
+    cartBtn.addEventListener("click", printCart);
 }

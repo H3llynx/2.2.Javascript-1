@@ -19,20 +19,19 @@ const form = document.querySelector("form");
 const validate = () => {
 	const isFormValid = Object.values(validationStatus).every(value => value === true);
 	if (!isFormValid) {
-		alert("Please fill in all required fields correctly.");
-		showEmptyFields();
+		const modal = new bootstrap.Modal(document.getElementById("formErrorModal"));
+		modal.show();
 		return
 	} else {
-		alert("Form submitted successfully");
-		window.location.href = "index.html";
+		const modal = new bootstrap.Modal(document.getElementById("formSuccessModal"));
+		modal.show();
+		setTimeout(() => {
+			window.location.href = "index.html";
+		}, 2000)
 	}
 };
 
-const showEmptyFields = () => {
-	form.querySelectorAll("input").forEach(input => {
-		input.classList.toggle("is-invalid", input.value === "");
-	});
-}
+
 
 const validateName = (input, errorBox, key) => {
 	validationStatus[key] = false;
