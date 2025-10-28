@@ -20,99 +20,103 @@ const validate = () => {
 	const isFormValid = Object.values(validationStatus).every(value => value === true);
 	if (!isFormValid) {
 		alert("Please fill in all required fields correctly.");
-		form.querySelectorAll("input").forEach(input => {
-			input.classList.toggle("is-invalid", input.value === "");
-		});
+		showEmptyFields();
 		return
 	} else {
 		alert("Form submitted successfully");
 	}
 };
 
+const showEmptyFields = () => {
+	form.querySelectorAll("input").forEach(input => {
+		input.classList.toggle("is-invalid", input.value === "");
+	});
+}
+
 const validateName = (input, errorBox, key) => {
 	validationStatus[key] = false;
 	const errorName = document.getElementById(errorBox);
-	errorName.textContent = "";
 	if (input.value.length < 3) {
-		errorName.style.display = "block";
+		input.classList.add("is-invalid");
 		errorName.textContent = "This field is required and must have at least 3 characters";
 	}
 	else if ((!(/^[\p{L}\s'-]+$/ui).test(input.value))) { // I'm allowing ', - and spaces as those are communs characters in French composed names
-		errorName.style.display = "block";
+		input.classList.add("is-invalid");
 		errorName.textContent = "This field can only include valid name characters";
 	}
 	else {
-		errorName.style.display = "none";
+		errorName.classList.remove("is-invalid");
+		input.classList.remove("is-invalid");
 		validationStatus[key] = true;
 	}
 };
 
-const validateEmail = () => {
+const validateEmail = (input, errorBox) => {
 	validationStatus.email = false;
-	const errorEmail = document.getElementById("errorEmail");
+	const errorEmail = document.getElementById(errorBox);
 	const emailPattern = /^[a-z0-9._%+-]+@[a-z0-9.-]+\.[a-z]{2,}$/i;
 	const includesEmoji = /\p{Extended_Pictographic}/gu;
-	if (fEmail.value.trim() === "") {
-		errorEmail.style.display = "block";
+	if (input.value.trim() === "") {
+		input.classList.add("is-invalid");
 		errorEmail.textContent = "This field is required";
 	}
-	else if (includesEmoji.test(fEmail.value)) {
-		errorEmail.style.display = "block";
+	else if (includesEmoji.test(input.value)) {
+		input.classList.add("is-invalid");
 		errorEmail.textContent = "Oops! Emojis are not allowed.";
-	} else if (!emailPattern.test(fEmail.value)) {
-		errorEmail.style.display = "block";
+	} else if (!emailPattern.test(input.value)) {
+		input.classList.add("is-invalid");
 		errorEmail.textContent = "Please try something like name@domain.com";
 	} else {
-		errorEmail.style.display = "none";
+		input.classList.remove("is-invalid");
 		validationStatus.email = true;
 	}
 };
 
-const validatePassword = () => {
+const validatePassword = (input, errorBox) => {
 	validationStatus.password = false;
-	const errorPassword = document.getElementById("errorPassword");
+	const errorPassword = document.getElementById(errorBox);
 	errorPassword.textContent = "";
-	if (fPassword.value.length < 4) {
-		errorPassword.style.display = "block";
+	if (input.value.length < 4) {
+		input.classList.add("is-invalid");
 		errorPassword.textContent = "The password must include at least 4 characters";
 	}
-	else if ((!(/\d/).test(fPassword.value))) {
-		errorPassword.style.display = "block";
-		errorPassword.textContent = "The password must include, at least, 1 digit";
+	else if ((!(/\d/).test(input.value))) {
+		input.classList.add("is-invalid");
+		errorPassword.textContent = "The password must include at least 1 digit";
 	} else {
-		errorPassword.style.display = "none";
+		input.classList.remove("is-invalid");
 		validationStatus.password = true;
 	}
 };
 
-const validatePhone = () => {
+const validatePhone = (input, errorBox) => {
 	validationStatus.phone = false;
-	const errorPhone = document.getElementById("errorPhone");
+	const errorPhone = document.getElementById(errorBox);
 	errorPhone.textContent = "";
-	if (!(/^\d+$/).test(fPhone.value)) {
-		errorPhone.style.display = "block";
+	if (!(/^\d+$/).test(input.value)) {
+		input.classList.add("is-invalid");
 		errorPhone.textContent = "This field only allow digits. If you have an international number, please replace + by 00";
 	}
-	else if (fPhone.value.length < 3) {
-		errorPhone.style.display = "block";
+	else if (input.value.length < 3) {
+		input.classList.add("is-invalid");
 		errorPhone.textContent = "Your phone number must include, at least, 3 digits";
 	}
 	else {
-		errorPhone.style.display = "none";
+		input.classList.remove("is-invalid");
 		validationStatus.phone = true;
 	}
 };
 
-const validateAddress = () => {
+const validateAddress = (input, errorBox) => {
 	validationStatus.address = false;
-	const errorAddress = document.getElementById("errorAddress");
+	const errorAddress = document.getElementById(errorBox);
 	errorAddress.textContent = "";
-	if (fAddress.value.length < 3) {
-		errorAddress.style.display = "block";
+	if (input.value.length < 3) {
+		input.classList.add("is-invalid");
 		errorAddress.textContent = "This field must include, at least, 3 characters";
 	}
 	else {
-		errorAddress.style.display = "none";
+		input.classList.remove("is-invalid");
 		validationStatus.address = true;
 	}
 };
@@ -124,16 +128,16 @@ if (fLastN) {
 	fLastN.addEventListener("blur", () => { validateName(fLastN, "errorLastN", "lastName") });
 };
 if (fEmail) {
-	fEmail.addEventListener("blur", validateEmail);
+	fEmail.addEventListener("blur", () => validateEmail(fEmail, "errorEmail"));
 };
 if (fPassword) {
-	fPassword.addEventListener("input", validatePassword);
+	fPassword.addEventListener("input", () => validatePassword(fPassword, "errorPassword"));
 };
 if (fPhone) {
-	fPhone.addEventListener("blur", validatePhone);
+	fPhone.addEventListener("blur", () => validatePhone(fPhone, "errorPhone"));
 };
 if (fAddress) {
-	fAddress.addEventListener("blur", validateAddress);
+	fAddress.addEventListener("blur", () => validateAddress(fAddress, "errorAddress"));
 };
 if (form) {
 	form.addEventListener("submit", (e) => {
