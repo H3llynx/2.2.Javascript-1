@@ -32,7 +32,6 @@ const validate = () => {
 };
 
 
-
 const validateName = (input, errorBox, key) => {
 	validationStatus[key] = false;
 	const errorName = document.getElementById(errorBox);
@@ -128,7 +127,7 @@ if (fLastN) {
 	fLastN.addEventListener("blur", () => { validateName(fLastN, "errorLastN", "lastName") });
 };
 if (fEmail) {
-	fEmail.addEventListener("blur", () => validateEmail(fEmail, "errorEmail"));
+	fEmail.addEventListener("change", () => validateEmail(fEmail, "errorEmail")); // blur is too intrusive, at least for me since it directly shows me error if I discard native auto fill option
 };
 if (fPassword) {
 	fPassword.addEventListener("input", () => validatePassword(fPassword, "errorPassword"));

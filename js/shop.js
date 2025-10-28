@@ -112,6 +112,7 @@ const calculateTotal = () => {
     for (let item of cart) {
         total += item.subtotalWithDiscount;
     }
+    total = parseFloat(total.toFixed(2));
     return total;
 }
 
