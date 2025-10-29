@@ -1,4 +1,5 @@
 @charset "UTF-8";
+@import url('https://fonts.googleapis.com/css2?family=Playfair+Display:ital,wght@0,400..900;1,400..900&display=swap');
 
 /*!
 * Start Bootstrap - Shop Homepage v5.0.4 (https://startbootstrap.com/template/shop-homepage)
@@ -71,6 +72,14 @@
   box-sizing: border-box;
 }
 
+/* Custom CSS */
+h1,
+h2,
+footer,
+.modal-body h3 {
+  font-family: "Playfair Display", serif;
+}
+
 .quantity {
   display: flex;
   gap: 0.4rem;
@@ -82,6 +91,20 @@
     padding: 0.6rem;
   }
 }
+
+.hero,
+.checkout {
+  background: url("../images/header.jpg");
+  background-size: cover;
+}
+
+.form-container {
+  background: rgba(255, 255, 255, 0.4);
+  backdrop-filter: blur(2px);
+  -webkit-backdrop-filter: blur(2px);
+}
+
+/**/
 
 @media (prefers-reduced-motion: no-preference) {
   :root {
@@ -3324,21 +3347,21 @@ fieldset:disabled .btn {
 
 .btn-secondary {
   color: #fff;
-  background-color: #6c757d;
-  border-color: #6c757d;
+  background-color: #a57876;
+  border-color: #a57876;
 }
 
 .btn-secondary:hover {
   color: #fff;
-  background-color: #5c636a;
-  border-color: #565e64;
+  background-color: #88615f;
+  border-color: #88615f;
 }
 
 .btn-check:focus+.btn-secondary,
 .btn-secondary:focus {
   color: #fff;
-  background-color: #5c636a;
-  border-color: #565e64;
+  background-color: #b88886;
+  border-color: #88615f;
   box-shadow: 0 0 0 0.25rem rgba(130, 138, 145, 0.5);
 }
 
@@ -3348,8 +3371,8 @@ fieldset:disabled .btn {
 .btn-secondary.active,
 .show>.btn-secondary.dropdown-toggle {
   color: #fff;
-  background-color: #565e64;
-  border-color: #51585e;
+  background-color: #7e5d5b;
+  border-color: #836a59;
 }
 
 .btn-check:checked+.btn-secondary:focus,
@@ -3363,8 +3386,8 @@ fieldset:disabled .btn {
 .btn-secondary:disabled,
 .btn-secondary.disabled {
   color: #fff;
-  background-color: #6c757d;
-  border-color: #6c757d;
+  background-color: #ad9e94;
+  border-color: #ad9e94;
 }
 
 .btn-success {
@@ -4629,6 +4652,7 @@ fieldset:disabled .btn {
   font-size: 1.25rem;
   text-decoration: none;
   white-space: nowrap;
+  font-family: "Playfair Display", serif;
 }
 
 .navbar-nav {
@@ -5092,7 +5116,7 @@ fieldset:disabled .btn {
 }
 
 .navbar-light .navbar-nav .nav-link {
-  color: rgba(0, 0, 0, 0.55);
+  color: #a57876;
 }
 
 .navbar-light .navbar-nav .nav-link:hover,

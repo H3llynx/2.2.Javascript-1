@@ -19,7 +19,7 @@
 	<link rel="stylesheet" href="css/styles.css">
 </head>
 
-<body>
+<body class="checkout">
 	<!-- Navigation-->
 	<nav class="navbar py-3 py-lg-2 navbar-light bg-light navbar-expand-lg" id="navbar-example2">
 		<div class="container d-flex">
@@ -64,23 +64,28 @@
 
 		<div class="row mr-0">
 			<div class="col-sm-6">
-				<h3 class="my-3 bord shadow text-center"><i class="fas fa-dollar-sign p-2"></i>Cash on Delivery</h3>
+				<h3 class="my-3 bord shadow text-center bg-light"><i class="fas fa-dollar-sign p-2"></i>Cash on
+					Delivery
+				</h3>
 			</div>
 			<div class="col-sm-6 ">
-				<h3 class="my-3 bord shadow text-center"><i class="fas fa-arrows-alt-h p-2"></i>100% Return</h3>
+				<h3 class="my-3 bord shadow text-center bg-light"><i class="fas fa-arrows-alt-h p-2"></i>100% Return
+				</h3>
 			</div>
 		</div>
 
 		<div class="row mr-0">
 			<div class="col-sm-6">
-				<h3 class="my-3 bord shadow text-center"><i class="far fa-thumbs-up p-2"></i>Quality Assured</h3>
+				<h3 class="my-3 bord shadow text-center bg-light"><i class="far fa-thumbs-up p-2"></i>Quality Assured
+				</h3>
 			</div>
 			<div class="col-sm-6 ">
-				<h3 class="my-3 bord shadow text-center"><i class="fas fa-stopwatch p-2"></i>Delivery on time</h3>
+				<h3 class="my-3 bord shadow text-center bg-light"><i class="fas fa-stopwatch p-2"></i>Delivery on time
+				</h3>
 			</div>
 		</div>
 		<form class="form">
-			<div class="row bord p-5 shadow m-5">
+			<div class="row bord py-5 px-3 lg:p-5 shadow my-5 mx-0 lg:m-5 form-container">
 				<div class="col-sm-6">
 					<div class="mt-3">
 						<label for="fName" class="form-label">First Name:</label>
@@ -123,7 +128,7 @@
 					</div>
 				</div>
 				<div class="col-12 mt-4 final">
-					<button type="submit" id="btn" class="p-2 px-4 btn btn-primary shadow-lg">
+					<button type="submit" id="btn" class="p-2 px-4 btn btn-dark shadow-lg">
 						<i class="fas fa-cart-arrow-down p-2"></i>Save
 					</button>
 				</div>
@@ -168,7 +173,7 @@
 						Total: $<span id="total_price"></span>
 					</div>
 					<div class="text-center">
-						<a href="checkout.html" class="btn btn-primary m-3" id="checkout">Checkout</a>
+						<a href="checkout.html" class="btn btn-dark m-3" id="checkout">Checkout</a>
 						<button type="button" class="btn btn-secondary m-3" id="clean-cart">Clean
 							Cart</button>
 					</div>

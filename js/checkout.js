@@ -19,6 +19,9 @@ const form = document.querySelector("form");
 const validate = () => {
 	const isFormValid = Object.values(validationStatus).every(value => value === true);
 	if (!isFormValid) {
+		document.querySelectorAll("input").forEach(input => {
+			if (input.value.length === 0) { input.classList.add("is-invalid") }
+		})
 		const modal = new bootstrap.Modal(document.getElementById("formErrorModal"));
 		modal.show();
 		return
