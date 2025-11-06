@@ -136,15 +136,15 @@ const printCart = () => {
     cart.forEach(item => {
         cartList.innerHTML += `
         <tr>
-        <th scope="row">${item.name}</th>
-        <td>$${item.price}</td>
+        <th scope="row">${DOMPurify.sanitize(item.name)}</th>
+        <td>$${DOMPurify.sanitize(item.price)}</td>
         <td><div class="quantity">
         <button class="remove btn btn-secondary btn-sm d-flex justify-content-center align-items-center" data-id="${item.id}">-</button>
-        ${item.quantity}
+        ${DOMPurify.sanitize(item.quantity)}
         <button class="add btn btn-secondary btn-sm d-flex justify-content-center align-items-center" data-id="${item.id}">+</button>
         </div>
         </td>
-        <td>$${item.subtotalWithDiscount}</td>
+        <td>$${DOMPurify.sanitize(item.subtotalWithDiscount)}</td>
         </tr>
         `;
     });
